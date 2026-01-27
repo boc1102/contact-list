@@ -1,0 +1,71 @@
+<%- include('./includes/head'); %>
+<%- include('./includes/nav'); %>
+
+<div class="container justify-content-center">
+  <div class="row py-5"></div>
+  <div class="row mt-4 justify-content-center">
+    <div class="col-lg-8">
+
+      <h1 class="text-center mb-5 pb-4">Create an Account</h1>
+
+      <form id="create-account-form" action="/createAccount/create" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <div class="form-group my-2">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
+          <p id="email-msg" class="text-danger d-inline-text opacity-0 fw-bold ps-2 pt-1" role="alert">
+            Placeholder
+          <p>
+        </div>
+
+        <div class="form-group my-2">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="" name="password">
+          <p id="password-msg" class="text-danger d-inline-text opacity-0 fw-bold ps-2 pt-1" role="alert">
+            Placeholder
+          <p>
+        </div>
+
+        <div class="form-group my-2">
+          <label for="password-confirm">Confirm password</label>
+          <input type="password" class="form-control" id="password-confirm" placeholder="" name="passwordConfirm">
+          <p id="password-confirm-msg" class="text-danger d-inline-text opacity-0 fw-bold ps-2 pt-1" role="alert">
+            Placeholder
+          <p>
+        </div>
+
+        <% if (errors.length > 0) { %>
+        <div class="row">
+          <div class="alert alert-danger"><% errors.forEach(element => { %>
+            <%= element %><br>
+            <% }); %> </div>
+        </div>
+        <% } %>
+
+        <% if (success.length > 0) { %>
+        <div class="row">
+          <div class="alert alert-success"><%= success %></div>
+        </div>
+        <% } %>
+
+        <div class="container text-center">
+          <div class="row mt-4 justify-content-center g-0">
+            <div class="col-4">
+              <button id="submit-btn" class="btn btn-primary w-100" type="submit" disabled>Create Account</button>
+            </div>
+            <div class="col-2 w-auto mx-5 text-center lh-lg fs-6">or</div>
+            <div class="col-4">
+              <a href="/login/index">
+                <button class="btn btn-secondary w-100" type="button">Sign In</button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/js/createAccount.bundle.js"></script>
+<%- include('./includes/footer'); %>
