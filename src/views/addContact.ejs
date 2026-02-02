@@ -1,0 +1,82 @@
+<%- include('./includes/head') %>
+<%- include('./includes/nav') %>
+
+<div class="container">
+
+  <div class="row w-auto justify-content-end m-4">
+    <a class="col-1" href="/">
+      <button type="button" class="btn btn-outline-secondary rounded-5 fw-bold">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#656565">
+          <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+        </svg>
+      </button>
+    </a>
+  </div>
+  <h1 class="text-center my-5">Add Contact</h1>
+  <form id="add-contact-form" action="/addContact/add" class="form" method="post">
+
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <%- include('./includes/messages.ejs') %>
+
+    <div class="row justify-content-center g-0">
+      <div class="form-group col-6">
+        <label for="first-name" class="form-label">First name</label>
+        <input type="text" class="form-control" id="first-name" name="firstName">
+        <p id="first-name-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
+          Placeholder
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center g-0">
+      <div class="form-group col-6">
+        <label for="last-name" class="form-label">Last name</label>
+        <input type="text" class="form-control" id="last-name" name="lastName">
+        <p id="last-name-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
+          Placeholder
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center g-0">
+      <div class="form-group col-6">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
+        <p id="email-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
+          Placeholder
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center g-0">
+      <div class="form-group col-6">
+        <label for="phone-number" class="form-label">Phone number</label><br>
+        <input id="phone-number" type="tel" class="form-control">
+        <input id="phone-number-real" type="hidden" name="phoneNumber">
+        <p id="phone-number-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
+          Placeholder
+        </p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center g-0 m-2">
+      <div class="col-3">
+        <button id="submit-btn" class="btn btn-primary w-100" type="submit">Add Contact</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<script>
+  history.pushState(null, null, location.href);
+
+  window.addEventListener('popstate', () => {
+    window.location.replace('/');
+  });
+</script>
+
+<script src="/js/addContact.bundle.js"></script>
+
+<%- include('./includes/footer') %>

@@ -6,8 +6,9 @@ const config = {
   mode: "development",
 
   entry: {
-    main: "./frontend/main.js",
-    createAccount: './src/public/js/createAccount.js'
+    main: './main.js',
+    createAccount: './src/public/js/createAccount.js',
+    addContact: './src/public/js/addContact.js'
   },
 
   output: {

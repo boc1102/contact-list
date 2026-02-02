@@ -9,6 +9,7 @@ function redirectBack(req, res, condition, msg) {
 
 const LoginController = {
     index(req, res) {
+        if (req.session.user) return res.redirect('/');
         res.render('login');
     },
 
@@ -22,6 +23,11 @@ const LoginController = {
 
         req.session.user = login.user;
         return redirectBack(req, res, 'success', 'Logged in!');
+    },
+
+    logout(req, res) {
+        req.session.destroy();
+        res.redirect('/');
     }
 }
 

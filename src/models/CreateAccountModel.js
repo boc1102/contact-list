@@ -45,11 +45,7 @@ class CreateAccount {
     }
 
     checkEntry() {
-        console.log(this.body); // d
-
         this.cleanUp();
-
-        console.log(this.body); // d
 
         if (!validator.isEmail(this.body.email)) {
             this.errors.push('Invalid email!');

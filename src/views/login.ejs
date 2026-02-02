@@ -1,5 +1,5 @@
-<%- include('./includes/head'); %>
-<%- include('./includes/nav'); %>
+<%- include('./includes/head') %>
+<%- include('./includes/nav') %>
 
 <div class="container justify-content-center">
   <div class="row py-5"></div>
@@ -20,19 +20,7 @@
           <input type="password" class="form-control" id="password" placeholder="name@example.com" name="password">
         </div>
 
-        <% if (errors.length > 0) { %>
-        <div class="row m-0">
-          <div class="alert alert-danger"><% errors.forEach(element => { %>
-            <%= element %><br>
-            <% }); %> </div>
-        </div>
-        <% } %>
-
-        <% if (success.length > 0) { %>
-        <div class="row m-0">
-          <div class="alert alert-success"><%= success %></div>
-        </div>
-        <% } %>
+        <%- include('./includes/messages') %>
 
         <div class="container text-center">
           <div class="row mt-5 justify-content-center g-0">
@@ -57,4 +45,5 @@
   </div>
 </div>
 
-<%- include('./includes/footer'); %>
+
+<%- include('./includes/footer') %>

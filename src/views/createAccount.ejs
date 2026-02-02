@@ -35,24 +35,12 @@
           <p>
         </div>
 
-        <% if (errors.length > 0) { %>
-        <div class="row">
-          <div class="alert alert-danger"><% errors.forEach(element => { %>
-            <%= element %><br>
-            <% }); %> </div>
-        </div>
-        <% } %>
-
-        <% if (success.length > 0) { %>
-        <div class="row">
-          <div class="alert alert-success"><%= success %></div>
-        </div>
-        <% } %>
+        <%- include('./includes/messages') %>
 
         <div class="container text-center">
           <div class="row mt-4 justify-content-center g-0">
             <div class="col-4">
-              <button id="submit-btn" class="btn btn-primary w-100" type="submit" disabled>Create Account</button>
+              <button id="submit-btn" class="btn btn-primary w-100" type="submit">Create Account</button>
             </div>
             <div class="col-2 w-auto mx-5 text-center lh-lg fs-6">or</div>
             <div class="col-4">

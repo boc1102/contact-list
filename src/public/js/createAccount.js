@@ -10,6 +10,20 @@ function showElement(element) {
     element.classList.add('opacity-100');
 }
 
+function elementPreventDefault(event) {
+    event.preventDefault();
+}
+
+function toggleBtn(btn, disable) {
+    btn.disabled = disable;
+    
+    if (disable) {
+        btn.addEventListener('click', elementPreventDefault);
+    } else {
+        btn.removeEventListener('click', elementPreventDefault);
+    }
+}
+
 function checkEmail(email) {
     const emailMsg = document.getElementById('email-msg');
 
@@ -84,10 +98,13 @@ function checkInputs() {
     let enable = checkEmail(email.value);
     enable = checkPassword(password.value, passwordConfirm.value);
 
-    submitBtn.setAttribute('disabled', '');
-    if (enable) submitBtn.removeAttribute('disabled');
+    toggleBtn(submitBtn, !enable);
 }
 
-const form = document.getElementById('create-account-form');
+checkInputs();
 
+const submitBtn = document.getElementById('submit-btn');
+toggleBtn(submitBtn, true);
+
+const form = document.getElementById('create-account-form');
 form.addEventListener('input', checkInputs);

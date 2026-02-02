@@ -9,6 +9,8 @@ import middleware from './src/middlewares/middleware.js';
 const __dirname = import.meta.dirname;
 const app = express();
 
+app.use(express.static(path.resolve(__dirname, 'dist')));
+
 // Session
 const sessionOptions = session({
     secret: 'akasdfj0út23453456+54qt23qv  qwf qwer qwer qewr asdasdasda a6()',
