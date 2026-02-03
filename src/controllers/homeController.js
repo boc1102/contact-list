@@ -2,7 +2,8 @@ import Home from "../models/HomeModel.js";
 
 const HomeController = {
   index(req, res) {
-    res.render('index');
+    const home = new Home(req.body, req.session.user);
+    res.render('index', { contacts: home.getContacts()});
   }
 };
 

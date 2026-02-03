@@ -6,19 +6,50 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-class AddContact {
-    constructor(body) {
+class UpdateContact {
+    constructor(body, user) {
         this.body = body;
         this.errors = [];
-        this.user = null;
+        this.user = user;
     }
 
-    addContact(userID) {
+    getContact(contactID) {
+      const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log });
+      db.pragma('journal_mode = WAL');
+
+      let contact;
+    
+      try {
+        const tableName = `contacts_${this.user.id}`;
+    
+        db.exec(`
+                CREATE TABLE IF NOT EXISTS ${tableName} (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                first_name TEXT NOT NULL,
+                last_name TEXT,
+                email TEXT,
+                phone_number TEXT
+                )`);
+    
+        contact = db.prepare(`SELECT * FROM ${tableName} WHERE id = ${contactID};`).get();
+      } catch (error) {
+        console.log(error);
+        console.log(this.errors);
+      } finally {
+        db.close();
+      }
+    
+      return contact;
+    }
+
+    updateContact(contactID) {
         const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log });
         db.pragma('journal_mode = WAL');
 
         try {
-            const tableName = `contacts_${userID}`;
+            console.log(this.body);
+
+            const tableName = `contacts_${this.user.id}`;
 
             db.exec(`
         CREATE TABLE IF NOT EXISTS ${tableName} (
@@ -34,8 +65,11 @@ class AddContact {
                 throw this.errors;
             }
 
-            const insertStmt = db.prepare(`INSERT INTO ${tableName} (first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?)`);
-            insertStmt.run(this.body.firstName, this.body.lastName, this.body.email, this.body.phoneNumber);
+            const updateStmt = db.prepare(`UPDATE ${tableName}
+                SET first_name = @firstName, last_name = @lastName, email = @email, phone_number = @phoneNumber
+                WHERE id = ${contactID}`);
+
+            updateStmt.run(this.body);
         } catch (error) {
             console.log(error);
             console.log(this.errors);
@@ -74,4 +108,4 @@ class AddContact {
     }
 }
 
-export default AddContact;
+export default UpdateContact;

@@ -1,8 +1,10 @@
 import Database from "better-sqlite3";
 import path from 'path';
 import bcrypt from "bcryptjs";
+import { fileURLToPath } from 'url';
 
-const __dirname = import.meta.dirname;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class Login {
     constructor(body) {
