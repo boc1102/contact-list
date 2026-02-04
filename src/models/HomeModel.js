@@ -12,7 +12,7 @@ class Home {
     this.errors = [];
   }
 
-  getContacts(req, res, next) {
+  getContacts() {
     const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log });
     db.pragma('journal_mode = WAL');
 
@@ -32,6 +32,7 @@ class Home {
 
       contacts = db.prepare(`SELECT * FROM ${tableName};`).all();
     } catch (error) {
+      this.errors.push(error);
       console.log(error);
       console.log(this.errors);
     } finally {
@@ -40,6 +41,32 @@ class Home {
 
     return contacts;
   };
+
+  deleteContact(contactID) {
+    const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log });
+    db.pragma('journal_mode = WAL');
+
+    try {
+      const tableName = `contacts_${this.user.id}`;
+
+      db.exec(`
+              CREATE TABLE IF NOT EXISTS ${tableName} (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              first_name TEXT NOT NULL,
+              last_name TEXT,
+              email TEXT,
+              phone_number TEXT
+              )`);
+
+      db.exec(`DELETE FROM ${tableName} WHERE id = ${contactID};`);
+    } catch (error) {
+      this.errors.push(error);
+      console.log(error);
+      console.log(this.errors);
+    } finally {
+      db.close();
+    }
+  }
 }
 
 export default Home;

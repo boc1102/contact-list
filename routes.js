@@ -9,6 +9,7 @@ import UpdateContactController from './src/controllers/updateContactController.j
 const router = Router();
 
 router.get('/', middleware.loginRequired, HomeController.index);
+router.get('/delete', middleware.loginRequired, HomeController.delete);
 
 router.get('/login/index', LoginController.index);
 router.post('/login/login', LoginController.login);
