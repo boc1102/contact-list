@@ -13,7 +13,7 @@ class Home {
   }
 
   getContacts() {
-    const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log });
+    const db = new Database(path.resolve(__dirname, '../../data.db'), { verbose: console.log, fileMustExist: false });
     db.pragma('journal_mode = WAL');
 
     let contacts;
@@ -43,7 +43,7 @@ class Home {
   };
 
   deleteContact(contactID) {
-    const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log });
+    const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log, fileMustExist: false });
     db.pragma('journal_mode = WAL');
 
     try {

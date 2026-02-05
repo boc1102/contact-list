@@ -14,7 +14,7 @@ class AddContact {
     }
 
     addContact(userID) {
-        const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log });
+        const db = new Database(path.resolve(__dirname, '../../data.db'), { verbose: console.log, fileMustExist: false });
         db.pragma('journal_mode = WAL');
 
         try {
