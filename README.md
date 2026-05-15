@@ -31,6 +31,11 @@ This project focuses on:
 
 Create a `.env` file in the project root and add the following variables:
 
+- PORT (Port)
+- MONGO_URI (MongoDB connection string)
+
+Example:
+
 ```env
 PORT=3000
 MONGO_URI=<your_mongodb_connection_string>
