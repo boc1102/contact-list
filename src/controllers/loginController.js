@@ -13,10 +13,10 @@ const LoginController = {
         res.render('login');
     },
 
-    login(req, res) {
+    async login(req, res) {
         const login = new Login(req.body);
-        login.login();
-        
+        await login.login();
+
         if (login.errors.length > 0) {
             return redirectBack(req, res, 'errors', login.errors);
         }

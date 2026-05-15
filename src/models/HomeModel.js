@@ -1,5 +1,6 @@
-import Database from "better-sqlite3";
-import path from 'path';
+import { ObjectId } from "mongodb";
+import { getDB, CONTACTS_OPTIONS } from "../../db.js";
+import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,59 +13,56 @@ class Home {
     this.errors = [];
   }
 
-  getContacts() {
-    const db = new Database(path.resolve(__dirname, '../../data.db'), { verbose: console.log, fileMustExist: false });
-    db.pragma('journal_mode = WAL');
-
+  async getContacts() {
     let contacts;
 
     try {
-      const tableName = `contacts_${this.user.id}`;
+      const db = getDB("contact-list");
 
-      db.exec(`
-              CREATE TABLE IF NOT EXISTS ${tableName} (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              first_name TEXT NOT NULL,
-              last_name TEXT,
-              email TEXT,
-              phone_number TEXT
-              )`);
+      const collectionName = `contacts_${this.user._id.toString()}`;
 
-      contacts = db.prepare(`SELECT * FROM ${tableName};`).all();
+      await db
+        .createCollection(collectionName, CONTACTS_OPTIONS)
+        .catch((err) => {
+          if (err.code !== 48) throw err;
+        });
+
+      const contactsCollection = db.collection(collectionName);
+
+      contacts = await contactsCollection.find({}).toArray();
     } catch (error) {
       this.errors.push(error);
       console.log(error);
       console.log(this.errors);
-    } finally {
-      db.close();
     }
-
+    
     return contacts;
-  };
+  }
 
-  deleteContact(contactID) {
-    const db = new Database(path.resolve(__dirname, '../../data/data.db'), { verbose: console.log, fileMustExist: false });
-    db.pragma('journal_mode = WAL');
-
+  async deleteContact(contactID) {
     try {
-      const tableName = `contacts_${this.user.id}`;
+      const db = getDB("contact-list");
 
-      db.exec(`
-              CREATE TABLE IF NOT EXISTS ${tableName} (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              first_name TEXT NOT NULL,
-              last_name TEXT,
-              email TEXT,
-              phone_number TEXT
-              )`);
+      const collectionName = `contacts_${this.user._id.toString()}`;
 
-      db.exec(`DELETE FROM ${tableName} WHERE id = ${contactID};`);
+      await db
+        .createCollection(collectionName, CONTACTS_OPTIONS)
+        .catch((err) => {
+          if (err.code !== 48) throw err;
+        });
+
+      const contactsCollection = db.collection(collectionName);
+
+      const contactObjId = new ObjectId(contactID);
+      await contactsCollection.deleteOne({
+        _id: {
+          $eq: contactObjId,
+        },
+      });
     } catch (error) {
       this.errors.push(error);
       console.log(error);
       console.log(this.errors);
-    } finally {
-      db.close();
     }
   }
 }

@@ -1,77 +1,79 @@
-import Database from "better-sqlite3";
-import validator from 'validator';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { getDB, CONTACTS_OPTIONS } from "../../db.js";
+import validator from "validator";
+import path from "path";
+import { fileURLToPath } from "url";
+import { BSONType } from "mongodb";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 class AddContact {
-    constructor(body) {
-        this.body = body;
-        this.errors = [];
-        this.user = null;
+  constructor(body, user) {
+    this.body = body;
+    this.errors = [];
+    this.user = user;
+  }
+
+  async addContact() {
+    try {
+      const db = getDB("contact-list");
+
+      const collectionName = `contacts_${this.user._id.toString()}`;
+
+      await db
+        .createCollection(collectionName, CONTACTS_OPTIONS)
+        .catch((err) => {
+          if (err.code !== 48) throw err;
+        });
+
+      const contacts = db.collection(collectionName);
+
+      this.checkEntry();
+      if (this.errors.length > 0) {
+        throw this.errors;
+      }
+
+      const contact = {
+        first_name: this.body.firstName,
+        last_name: this.body.lastName,
+        email: this.body.email,
+        phone_number: this.body.phoneNumber,
+      };
+      contacts.insertOne(contact);
+    } catch (error) {
+      console.log(error);
+      console.log(this.errors);
+    }
+  }
+
+  checkEntry() {
+    this.cleanUp();
+
+    if (this.body.email) {
+      if (!validator.isEmail(this.body.email)) {
+        this.errors.push("Invalid email!");
+      }
     }
 
-    addContact(userID) {
-        const db = new Database(path.resolve(__dirname, '../../data.db'), { verbose: console.log, fileMustExist: false });
-        db.pragma('journal_mode = WAL');
+    if (!this.body.firstName) {
+      this.errors.push("First name required!");
+    }
+  }
 
-        try {
-            const tableName = `contacts_${userID}`;
-
-            db.exec(`
-        CREATE TABLE IF NOT EXISTS ${tableName} (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        first_name TEXT NOT NULL,
-        last_name TEXT,
-        email TEXT,
-        phone_number TEXT
-        )`);
-
-            this.checkEntry();
-            if (this.errors.length > 0) {
-                throw this.errors;
-            }
-
-            const insertStmt = db.prepare(`INSERT INTO ${tableName} (first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?)`);
-            insertStmt.run(this.body.firstName, this.body.lastName, this.body.email, this.body.phoneNumber);
-        } catch (error) {
-            console.log(error);
-            console.log(this.errors);
-        } finally {
-            db.close();
-        }
+  cleanUp() {
+    for (const key in this.body) {
+      if (typeof this.body[key] !== "string") {
+        this.body[key] = "";
+      }
     }
 
-    checkEntry() {
-        this.cleanUp();
-
-        if (this.body.email) {
-            if (!validator.isEmail(this.body.email)) {
-                this.errors.push('Invalid email!');
-            }
-        }
-
-        if (!this.body.firstName) {
-            this.errors.push('First name required!');
-        }
-    }
-
-    cleanUp() {
-        for (const key in this.body) {
-            if (typeof this.body[key] !== 'string') {
-                this.body[key] = '';
-            }
-        }
-
-        this.body = {
-            firstName: this.body.firstName,
-            lastName: this.body.lastName,
-            email: this.body.email,
-            phoneNumber: this.body.phoneNumber
-        };
-    }
+    this.body = {
+      firstName: this.body.firstName,
+      lastName: this.body.lastName,
+      email: this.body.email,
+      phoneNumber: this.body.phoneNumber,
+    };
+  }
 }
 
 export default AddContact;

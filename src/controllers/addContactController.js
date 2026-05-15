@@ -12,9 +12,9 @@ const AddContactController = {
         res.render('addContact');
     },
 
-    add(req, res) {
-        const addContact = new AddContact(req.body);
-        addContact.addContact(req.session.user.id);
+    async add(req, res) {
+        const addContact = new AddContact(req.body, req.session.user);
+        await addContact.addContact();
         
         if (addContact.errors.length > 0) {
             return redirectBack(req, res, 'errors', addContact.errors);

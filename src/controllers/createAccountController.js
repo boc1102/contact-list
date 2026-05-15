@@ -12,9 +12,9 @@ const CreateAccountController = {
         res.render('createAccount');
     },
 
-    create(req, res) {
+    async create(req, res) {
         const createAccount = new CreateAccount(req.body);
-        createAccount.createAccount();
+        await createAccount.createAccount();
         
         if (createAccount.errors.length > 0) {
             return redirectBack(req, res, 'errors', createAccount.errors);

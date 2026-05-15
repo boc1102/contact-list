@@ -13,7 +13,7 @@
     </a>
   </div>
   <h1 class="text-center my-5">Edit Contact</h1>
-  <form id="add-contact-form" action="update?<%= new URLSearchParams(query).toString() %>" class="form" method="post">
+  <form id="add-contact-form" autocomplete="off" action="update?<%= new URLSearchParams(query).toString() %>" class="form" method="post">
 
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
@@ -22,7 +22,7 @@
     <div class="row justify-content-center g-0">
       <div class="form-group col-6">
         <label for="first-name" class="form-label">First name</label>
-        <input type="text" class="form-control" id="first-name" name="firstName" value= <%= contact.first_name %>>
+        <input type="text" class="form-control" id="first-name" name="firstName" value="<%= contact.first_name %>" >
         <p id="first-name-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
           Placeholder
         </p>
@@ -32,7 +32,7 @@
     <div class="row justify-content-center g-0">
       <div class="form-group col-6">
         <label for="last-name" class="form-label">Last name</label>
-        <input type="text" class="form-control" id="last-name" name="lastName" value= <%= contact.last_name %>>
+        <input type="text" class="form-control" id="last-name" name="lastName" value= "<%= contact.last_name %>">
         <p id="last-name-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
           Placeholder
         </p>
@@ -42,7 +42,7 @@
     <div class="row justify-content-center g-0">
       <div class="form-group col-6">
         <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" value= <%= contact.email %>>
+        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" value= "<%= contact.email %>">
         <p id="email-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
           Placeholder
         </p>
@@ -52,7 +52,7 @@
     <div class="row justify-content-center g-0">
       <div class="form-group col-6">
         <label for="phone-number" class="form-label">Phone number</label><br>
-        <input id="phone-number" type="tel" class="form-control" value= <%= contact.phone_number %>>
+        <input id="phone-number" type="tel" class="form-control" value= "<%= contact.phone_number %>">
         <input id="phone-number-real" type="hidden" name="phoneNumber">
         <p id="phone-number-msg" class="text-danger d-inline-text opacity-0 fw-bold m-0 ps-2 pt-1" role="alert">
           Placeholder

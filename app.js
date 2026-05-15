@@ -1,5 +1,6 @@
 import express from 'express';
 import session from 'express-session';
+import { MongoClient } from 'mongodb';
 import flash from 'connect-flash';
 import routes from './routes.js';
 import path from 'path';
@@ -11,7 +12,7 @@ const app = express();
 
 app.use(express.static(path.resolve(__dirname, 'dist')));
 
-// Session
+// Express session
 const sessionOptions = session({
     secret: 'akasdfj0út23453456+54qt23qv  qwf qwer qwer qewr asdasdasda a6()',
     resave: false,
@@ -23,6 +24,9 @@ const sessionOptions = session({
 });
 app.use(sessionOptions);
 app.use(flash());
+
+// MongoDB client
+const client = new MongoClient(process.env.MONGO_URI);
 
 // View engine
 app.set("view engine", "ejs");
